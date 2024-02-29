@@ -25,26 +25,6 @@ jobs:
           echo "$GITHUB_CONTEXT";
           echo $GITHUB_CONTEXT | jq -r .number
           echo $GITHUB_CONTEXT | jq -r .event.pull_request.head.sha
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
 
       - name: Show default environment variables
         run: |
@@ -67,10 +47,10 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/rivial-data-security/rivial-information-security-center/commits/$COMMIT_SHA/pulls | jq -r '.[0].number');
+            https://api.github.com/repos/dbudwin/copy-artifact-repro/commits/$COMMIT_SHA/pulls | jq -r '.[0].number');
             echo "prNumber=${prNumber}" >> "$GITHUB_OUTPUT"
       - name: setup env variable
-        run: echo "PR Number for SHA '$COMMIT_SHA' is '$prNumber'"
+        run: echo "PR Number for SHA '$COMMIT_SHA' is '$PR_NUMBER'"
         env:
           PR_NUMBER: ${{ steps.get_pr_number.outputs.prNumber }}
   sonarcloud:
@@ -79,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: setup env variable
-        run: echo "🚀🚀🚀 env variable is ${{ needs.getPrNumber.outputs.prNumber }}"
+        run: echo "🚀🚀🚀 PR Number is ${{ needs.getPrNumber.outputs.prNumber }}"
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
