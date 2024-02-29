@@ -70,3 +70,4 @@ jobs:
           workflow: jest.yml
           pr: ${{ needs.getPrNumber.outputs.prNumber }}
           name: code-coverage-reports
+          workflow_conclusion: in_progress
