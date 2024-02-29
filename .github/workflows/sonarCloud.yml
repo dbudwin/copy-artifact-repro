@@ -67,7 +67,7 @@ jobs:
       - name: Fetch Archive of Code Coverage Results
         uses: dawidd6/action-download-artifact@v3
         with:
+          workflow_conclusion: in_progress
           workflow: build.yml
           pr: 2
           name: code-coverage-reports
-          #workflow_conclusion: ''
