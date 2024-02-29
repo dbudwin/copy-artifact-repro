@@ -70,4 +70,4 @@ jobs:
           workflow: jest.yml
           pr: 2
           name: code-coverage-reports
-          workflow_conclusion: ''
+          workflow_conclusion:
