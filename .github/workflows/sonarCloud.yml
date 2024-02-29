@@ -69,5 +69,5 @@ jobs:
         with:
           workflow: build.yml
           pr: ${{ needs.getPrNumber.outputs.prNumber }}
-          workflow_conclusion: in_progress
+          workflow_conclusion: ''
           name: code-coverage-reports
