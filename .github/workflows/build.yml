@@ -1,0 +1,28 @@
+name: Pull Request Checks
+
+env:
+  NODE_VERSION: 20
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - staging
+
+jobs:
+  install-dependencies:
+    name: Install Dependencies
+    uses: ./.github/workflows/dependencies.yml
+    secrets: inherit
+
+  jest:
+    name: Jest
+    needs: install-dependencies
+    uses: ./.github/workflows/jest.yml
+    secrets: inherit
+
+  sonarCloud:
+    name: Sonar Cloud
+    needs: jest
+    uses: ./.github/workflows/sonarCloud.yml
+    secrets: inherit

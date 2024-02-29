@@ -1,0 +1,43 @@
+name: Jest Tests
+
+on:
+  workflow_call:
+
+env:
+  PR_NUMBER: ${{ github.event.number }}
+
+jobs:
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        run: echo "PR NUMBER >>>>>> $PR_NUMBER";
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Fetch NPM Dependencies Cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Run Jest Tests
+        run: npm run test:ci
+
+      - name: Archive Code Coverage Results
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-reports
+          retention-days: 14
+          overwrite: true
+          path: |
+            **/coverage/lcov.info
+            !**/node_modules/**

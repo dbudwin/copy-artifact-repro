@@ -1,0 +1,30 @@
+name: Install Dependencies
+
+on:
+  workflow_call:
+
+jobs:
+  install-dependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Create Cache of Root NPM Dependencies
+        uses: actions/cache@v3
+        id: cache-root-deps
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Root Dependencies
+        if: steps.cache-root-deps.outputs.cache-hit != 'true'
+        run: npm clean-install
